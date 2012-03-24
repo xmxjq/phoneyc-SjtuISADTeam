@@ -391,7 +391,7 @@ class Window(object):
     def __window_ie80_blur(self):
         self.__window_blur()
 
-    def __window_firefox_back(self):
+    def __window_firefox_blur(self):
         self.__window_blur()
 
 
