@@ -59,7 +59,10 @@ class Location(object):
          
         # fix up relative URLs to absolute URLs
         if not isinstance(url, str):
-            return 'blank:'
+            if not isinstance(url, unicode):
+                print type(url)
+                print url
+                return 'blank:'
         scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
 
         # Convert netloc to lowercase. This is what a normal browser will do.

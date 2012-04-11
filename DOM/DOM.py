@@ -10,6 +10,7 @@ sys.path.append(basedir)
 from ActiveX.ActiveX import *
 from Window import Window
 from PageParser import PageParser
+from Tracer.Tracer import tracer
 
 class DOM:
     """
@@ -31,6 +32,7 @@ class DOM:
         self.windows = []
         self.url     = url
         os.environ['PHONEYC_MOCK_ACTIVEX'] = '0'
+        tracer.init_root(url)
 
     def do_execute(self, window, parser, element):
         f = 'function(){' + element + '}'
@@ -133,7 +135,7 @@ class DOM:
             # of such error
             if config.universal_activex and self.check_mock_activex(e):
                 # Being here means we raised a UserWarning exception (take a
-                # look at ActiveX/ActiveX.py for additional deatils). This
+                # look at ActiveX/ActiveX.py for additional detials). This
                 # means we were unable to instantiate an ActiveX object because
                 # there's not an emulation script for it or because it doesn't
                 # exist at all. The latter case could be used to defeat our
@@ -272,4 +274,5 @@ class DOM:
             if alist:
                 alertlist.extend(alist)
         
-	    return alertlist
+        tracer.printTraceRoute()
+        return alertlist

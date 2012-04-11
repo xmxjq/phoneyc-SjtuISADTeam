@@ -7,6 +7,8 @@ import traceback
 
 import config
 
+from Tracer.Tracer import tracer
+
 # TODO
 # handle HTTPS by not enforcing certificate chain checks
 # actually use the ignored domains bit
@@ -83,7 +85,9 @@ class HttpHoneyClient(object):
         if url.find("/", 8) < 0:
            url += "/"
         config.VERBOSE(config.VERBOSE_REFGRAPH, '[REFGRAPH] "' + str(referrer) + '"->"' + url + '"')
-
+        
+        tracer.addNewUrl(url, str(referrer))
+        
         self.__saveurl(url)
         c = pycurl.Curl()
         c.setopt(pycurl.FOLLOWLOCATION, 1)

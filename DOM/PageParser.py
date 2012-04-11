@@ -158,7 +158,7 @@ class PageParser(SGMLParser):
     def start_iframe(self, attrs):
         self.unknown_starttag('iframe', attrs)
         src = self.DOM_stack[-1].src
-
+        
         from Window import Window
         window = Window(self.__dict__['__window'].__dict__['__root'],
                         self.__dict__['__window'].document.location.fix_url(src),
@@ -172,8 +172,9 @@ class PageParser(SGMLParser):
     def start_frame(self, attrs):
         self.unknown_starttag('frame', attrs)
         if 'src' in self.DOM_stack[-1].__dict__:
-            src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
+            src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)            
             frame, headers = hc.get(src, self.__dict__['__window'].document.location.href)
+            
             self.DOM_stack[-1].__dict__['frame'] = frame
 
     def end_frame(self):
@@ -199,6 +200,11 @@ class PageParser(SGMLParser):
 
         if tag == 'script':
             domobj.__dict__['script'] = ''
+            
+#        if tag == 'iframe':                    #for iframe debug
+#            if 'src' in domobj.__dict__:
+#                src = domobj.__dict__['src']
+#                print src
 
         if config.retrieval_all:
             if 'src' in domobj.__dict__:

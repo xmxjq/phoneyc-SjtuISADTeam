@@ -266,6 +266,10 @@ class Document(DOMObject):
 
         self.__dict__['__dynamic'].append(text) 
         content = ''.join(self.__dict__['__dynamic'])
+        
+        config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] the dynamic stream...')
+        config.VERBOSE(config.VERBOSE_DETAIL, content)
+        
         p = PageParser(self.contentWindow,
                        self.contentWindow.__dict__['__sl'][-1], 
                        content,
