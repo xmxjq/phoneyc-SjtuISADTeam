@@ -15,7 +15,8 @@ class TraceNode(object):
 
     def __init__(self, url, parentnode):
         self.url = url
-        self.__urlhash = hashlib.md5(url).hexdigest()
+        self.alert = False
+        self.urlhash = hashlib.md5(url).hexdigest()
         if not parentnode is None:
             self.__parentnode = parentnode
             self.layer = parentnode.layer + 1
@@ -30,9 +31,36 @@ class TraceNode(object):
         
     def printNodeInfo(self):
         if not self.__parentnode is None:
-            print self.__parentnode.layer,":",
+            print self.__parentnode.layer, ":",
             print self.__parentnode.url,
             print "->",
             
-        print self.layer,":",
+        print self.layer, ":",
         print self.url
+        
+        if self.alert == True:
+            print "Alert!"
+    
+    def findAlertRoute(self):
+        if not self.__childrenNodelist:
+            alertRouteFlag = False
+            for child in self.__childrenNodelist:
+                alertRouteFlag = alertRouteFlag or child.findAlertRoute()
+            if alertRouteFlag == True:
+                self.printNodeInfo()
+            return alertRouteFlag
+        else:
+            if self.alert == True:
+                self.printNodeInfo()
+                return True
+            else:
+                return False
+    
+    def saveNode(self, conn, roothash):
+        cur = conn.cursor()
+        insert_stmt = 'insert into tracer_node_table values (?, ?, ?, ?, ?, ?)'
+        if not self.__parentnode is None:
+            record = ( roothash, self.urlhash, self.url, self.__parentnode.urlhash, self.layer, self.alert*1 )
+        else:
+            record = ( roothash, self.urlhash, self.url, '', self.layer, self.alert*1 )
+        cur.execute(insert_stmt, record)

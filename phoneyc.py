@@ -191,7 +191,7 @@ if __name__ == "__main__":
     phoneycdom = DOM(config.initial_URL)
     alerts = phoneycdom.analyze()
     if alerts:
-        print "There is some Shellcode/Heapspray Alerts but it is not important for this program now. ^_^"
+        print "There is some Shellcode/Heapspray Alerts but it is not important for this program now."
 #        report(alerts)
     else:
         print "No Shellcode/Heapspray Alerts."

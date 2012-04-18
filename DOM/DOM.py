@@ -272,7 +272,10 @@ class DOM:
 
             alist = window.__dict__['__cx'].get_alertlist()
             if alist:
+                tracer.AddNodeAlert(window.__dict__['__url'])
                 alertlist.extend(alist)
         
         tracer.printTraceRoute()
+#        tracer.printAlertRoute()
+#        tracer.saveTraceRoute()
         return alertlist

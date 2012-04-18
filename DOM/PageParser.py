@@ -156,18 +156,20 @@ class PageParser(SGMLParser):
             self.dynamic = False
 
     def start_iframe(self, attrs):
-        self.unknown_starttag('iframe', attrs)
-        src = self.DOM_stack[-1].src
-        
-        from Window import Window
-        window = Window(self.__dict__['__window'].__dict__['__root'],
-                        self.__dict__['__window'].document.location.fix_url(src),
-                        self.__dict__['__window'])
-        parser = PageParser(window, window.document, window.__dict__['__html'])
-        parser.close()
+        if not self.in_Script:
+            self.unknown_starttag('iframe', attrs)
+            src = self.DOM_stack[-1].src
+            
+            from Window import Window
+            window = Window(self.__dict__['__window'].__dict__['__root'],
+                            self.__dict__['__window'].document.location.fix_url(src),
+                            self.__dict__['__window'])
+            parser = PageParser(window, window.document, window.__dict__['__html'])
+            parser.close()
 
     def end_iframe(self):
-        self.unknown_endtag('iframe')
+        if not self.in_Script:
+            self.unknown_endtag('iframe')
 
     def start_frame(self, attrs):
         self.unknown_starttag('frame', attrs)
