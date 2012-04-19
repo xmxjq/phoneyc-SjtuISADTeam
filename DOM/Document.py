@@ -264,7 +264,7 @@ class Document(DOMObject):
         config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] in Document.py Document.write(ln)...')
         config.VERBOSE(config.VERBOSE_DETAIL, str(text))
 
-        self.__dict__['__dynamic'].append(text) 
+        self.__dict__['__dynamic'].append(str(text)) 
         content = ''.join(self.__dict__['__dynamic'])
         
         config.VERBOSE(config.VERBOSE_DEBUG, '[DEBUG] the dynamic stream...')

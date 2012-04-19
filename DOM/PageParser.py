@@ -112,11 +112,9 @@ class PageParser(SGMLParser):
                 config.VERBOSE(config.VERBOSE_DEBUG, "[DEBUG] in PageParser.py: Ignoring(ignoreScript) start_object attrs: " +str(attrs))
                 self.ignoreScript = True
                 return
-
+               
         self.unknown_starttag('script', attrs)
-        self.in_Script = True
-        self.literal = 1
-
+        
         if 'src' in self.DOM_stack[-1].__dict__:
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
             script, headers = hc.get(src, self.__dict__['__window'].document.location.href)            
@@ -127,7 +125,10 @@ class PageParser(SGMLParser):
             self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
             self.end_script()
             return
-       
+                
+        self.in_Script = True
+        self.literal = 1
+               
         self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
 
     def end_script(self):
@@ -144,8 +145,15 @@ class PageParser(SGMLParser):
         if self.__dict__['__window'].__dict__['__sl'] == []:
             self.endearly = True
        
+        part = re.compile(';[ \f\r\t\n]*finally')
+        match = part.search(self.DOM_stack[-1].__dict__['script'])
+        while match:
+            i = match.start()
+            self.DOM_stack[-1].__dict__['script'] = self.DOM_stack[-1].__dict__['script'][:i]+self.DOM_stack[-1].__dict__['script'][i+1:]
+            match = part.search(self.DOM_stack[-1].__dict__['script'])
+        
         script = self.DOM_stack[-1].__dict__['script']
-
+        
         if self.dynamic:
             script = self.DOM_stack[-1].__dict__['script']
             window = self.__dict__['__window']
@@ -253,8 +261,8 @@ class PageParser(SGMLParser):
             return
 
     def unknown_startendtag(self, tag, attrs):
-        unknown_starttag(self, tag, attrs)
-        unknown_endtag(self, tag)
+        self.unknown_starttag(self, tag, attrs)
+        self.unknown_endtag(self, tag)
 
     def start_embed(self, attrs):
         self.unknown_starttag('embed', attrs)
