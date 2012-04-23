@@ -135,12 +135,12 @@ class DOM:
             # of such error
             if config.universal_activex and self.check_mock_activex(e):
                 # Being here means we raised a UserWarning exception (take a
-                # look at ActiveX/ActiveX.py for additional detials). This
+                # look at ActiveX/ActiveX.py for additional details). This
                 # means we were unable to instantiate an ActiveX object because
                 # there's not an emulation script for it or because it doesn't
                 # exist at all. The latter case could be used to defeat our
                 # universal ActiveX object which is disabled during the first
-                # attempt in order to emulate what should be the behaviour of a
+                # attempt in order to emulate what should be the behavior of a
                 # real browser. In order to have a better understanding of what's
                 # going on we enable the universal ActiveX object and move on.
                 self.enable_mock_activex()
@@ -153,7 +153,7 @@ class DOM:
                 self.last_try_script(window, script, traceback.format_exc())
             except Exception, e:
                 # No luck!
-                config.VERBOSE(config.VERBOSE_DEBUG, traceback.print_exc())
+                #config.VERBOSE(config.VERBOSE_DEBUG, traceback.print_exc())
                 try:
                     if isinstance(self.__dict__['__window'].__dict__['__sl'][-1].src, str):
                         print self.__dict__['__window'].__dict__['__sl'][-1].src

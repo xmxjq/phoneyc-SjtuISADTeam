@@ -114,6 +114,8 @@ class PageParser(SGMLParser):
                 return
                
         self.unknown_starttag('script', attrs)
+        self.in_Script = True
+        self.literal = 1
         
         if 'src' in self.DOM_stack[-1].__dict__:
             src = self.__dict__['__window'].document.location.fix_url(self.DOM_stack[-1].src)
@@ -126,8 +128,7 @@ class PageParser(SGMLParser):
             self.end_script()
             return
                 
-        self.in_Script = True
-        self.literal = 1
+        
                
         self.__dict__['__window'].__dict__['__sl'].append(self.DOM_stack[-1])
 
@@ -151,6 +152,11 @@ class PageParser(SGMLParser):
             i = match.start()
             self.DOM_stack[-1].__dict__['script'] = self.DOM_stack[-1].__dict__['script'][:i]+self.DOM_stack[-1].__dict__['script'][i+1:]
             match = part.search(self.DOM_stack[-1].__dict__['script'])
+
+#        This patch was used for fixing the bug while detecting Exploit.Ie0dayCVE0806.a        
+        self.DOM_stack[-1].__dict__['script'] = re.sub('"\[object Error\]"', '"[object Error]" || 1 == 1', self.DOM_stack[-1].__dict__['script'])
+
+        
         
         script = self.DOM_stack[-1].__dict__['script']
         
